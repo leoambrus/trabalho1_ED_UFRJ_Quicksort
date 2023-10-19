@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#define capacidade_inicial 500
 
 // Função de particionamento
 int particiona(int V[], int inicio, int fim) {
@@ -59,20 +60,26 @@ void quicksort(int V[], int inicio, int fim) {
 int main() {
     int *V = NULL;  // Inicialmente, o vetor está vazio
     int tamanho = 0;    // Tamanho atual do vetor
+    int capacidade = capacidade_inicial;
     int numero;
     int i = 0;
     //para rodar no site do claudson tem que tirar os printf desnecessários como digite os numeros e vetor ordenado
 
     printf("Digite numeros (Ctrl+Z para encerrar):\n");
 
-    while (scanf("%d", &numero) != EOF) {
-        // Alocar memória para armazenar o próximo número
-        V = (int *)realloc(V, (tamanho + 1) * sizeof(int));
+    V = (int *)malloc(capacidade * sizeof(int));
+    if (V == NULL) {
+        printf("Erro ao alocar memória.\n");
+        exit(1);
+    }
 
-        if (V == NULL) {
-            printf("Erro ao alocar memória.\n");
-            exit(1);
+    while (scanf("%d", &numero) != EOF) {
+        // Se o tamanho do vetor for maior que a capacidade eu dobro o tamanho do mesmo
+        if (tamanho == capacidade) {
+            capacidade *= 2;
+            V = (int *)realloc(V, capacidade * sizeof(int));
         }
+
 
         // Armazenar o número no vetor
         V[tamanho] = numero;
